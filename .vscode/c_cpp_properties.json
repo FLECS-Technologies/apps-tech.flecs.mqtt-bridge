@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/app/include",
+                "${workspaceFolder}/app/flunder/include"
+            ],
+            "defines": [
+                "FLECS_EXPORT=__attribute__((visibility(\"default\")))",
+                "FLECS_FINAL_UNLESS_TESTED=",
+                "FLECS_CONSTEXPR_UNLESS_TESTED="
+            ],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "linux-gcc-x64",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
