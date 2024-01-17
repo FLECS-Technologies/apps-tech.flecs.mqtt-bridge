@@ -48,5 +48,19 @@ add_executable(mqtt_bridge ${SRC} ${HEADER})
 target_include_directories(mqtt_bridge PRIVATE include)
 target_link_libraries(mqtt_bridge PUBLIC
     flunder.shared
-    mosquitto
+    PkgConfig::Mosquitto
+)
+
+install(TARGETS mqtt_bridge RUNTIME)
+install(TARGETS flunder.shared LIBRARY)
+get_target_property(zenohc-lib zenohc::lib IMPORTED_LOCATION)
+install(
+    FILES ${zenohc-lib}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+    PERMISSIONS GROUP_READ GROUP_EXECUTE
+    PERMISSIONS WORLD_READ WORLD_EXECUTE
+)
+install(
+    CODE "file (INSTALL ${pkgcfg_lib_Mosquitto_mosquitto} DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} FOLLOW_SYMLINK_CHAIN)"
 )
