@@ -61,6 +61,16 @@ install(
     PERMISSIONS GROUP_READ GROUP_EXECUTE
     PERMISSIONS WORLD_READ WORLD_EXECUTE
 )
+# These libs are of type "UNKNOWN", and cannot be installed with IMPORTED_RUNTIME_ARTIFACTS
+get_property(openssl_crypto_lib TARGET OpenSSL::Crypto PROPERTY IMPORTED_LOCATION)
+get_property(openssl_ssl_lib TARGET OpenSSL::SSL PROPERTY IMPORTED_LOCATION)
+install(
+    CODE "file (
+            INSTALL ${openssl_crypto_lib} ${openssl_ssl_lib} ${pkgcfg_lib_libusb_usb-1.0}
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
+            FOLLOW_SYMLINK_CHAIN
+        )"
+)
 install(
     CODE "file (INSTALL ${pkgcfg_lib_Mosquitto_mosquitto} DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} FOLLOW_SYMLINK_CHAIN)"
 )
