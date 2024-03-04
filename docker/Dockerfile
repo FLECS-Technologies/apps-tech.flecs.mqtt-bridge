@@ -20,4 +20,4 @@ COPY --from=builder /fs /usr/
 
 RUN ldconfig
 
-ENTRYPOINT ["/usr/bin/mqtt_bridge"]
+ENTRYPOINT ["/usr/local/bin/mqtt_bridge"]
