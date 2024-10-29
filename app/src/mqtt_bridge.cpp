@@ -141,7 +141,7 @@ auto mqtt_bridge_t::flunder_receive_callback(
         std::fprintf(stdout, "-- dropping message %s due to topic\n", var->topic().data());
         return;
     }
-    if (var->encoding() == "application/mqtt-forwarded") {
+    if (var->encoding() == "application/octet-stream;bridge=mqtt") {
         std::fprintf(
             stdout,
             "-- dropping message %s due to encoding %s\n",
@@ -201,7 +201,7 @@ void mqtt_bridge_t::mosquitto_receive_callback(mosquitto*, void* userp, const mo
         static_cast<std::string_view>(msg->topic),
         static_cast<const void*>(msg->payload),
         static_cast<std::size_t>(msg->payloadlen),
-        "application/mqtt-forwarded");
+        "application/octet-stream;bridge=mqtt");
 
     std::fprintf(stdout, "++ forwarded mqtt message for topic %s to flunder\n", msg->topic);
 }
