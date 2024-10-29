@@ -19,6 +19,9 @@ include(${CMAKE_SOURCE_DIR}/flecs-build/cmake/flecs-build.cmake)
 project(tech.flecs.mqtt-bridge VERSION 3.0.2)
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+    set(FLECS_NEED_ZENOHC TRUE)
+    set(FLECS_NEED_OPENSSL TRUE)
+    set(FLECS_NEED_MOSQUITTO TRUE)
     add_subdirectory(flecs-external)
 endif()
 add_subdirectory(flunder)
@@ -48,8 +51,10 @@ add_executable(mqtt_bridge ${SRC} ${HEADER})
 target_include_directories(mqtt_bridge PRIVATE include)
 target_link_libraries(mqtt_bridge PUBLIC
     flunder.shared
-    PkgConfig::Mosquitto
+    Mosquitto::Mosquitto
 )
+
+include(GNUInstallDirs)
 
 install(TARGETS mqtt_bridge RUNTIME)
 install(TARGETS flunder.shared LIBRARY)
@@ -60,6 +65,14 @@ install(
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
     PERMISSIONS GROUP_READ GROUP_EXECUTE
     PERMISSIONS WORLD_READ WORLD_EXECUTE
+)
+get_target_property(mosquitto-lib Mosquitto::Mosquitto IMPORTED_LOCATION)
+install(
+    CODE "file (
+        INSTALL ${mosquitto-lib}
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
+        FOLLOW_SYMLINK_CHAIN
+    )"
 )
 # These libs are of type "UNKNOWN", and cannot be installed with IMPORTED_RUNTIME_ARTIFACTS
 get_property(openssl_crypto_lib TARGET OpenSSL::Crypto PROPERTY IMPORTED_LOCATION)
